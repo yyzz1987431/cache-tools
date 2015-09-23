@@ -11,7 +11,7 @@ package com.qbao.middleware.cache.exception;
  */
 public enum CacheExceptionEnum {
 
-    参数异常(1),连接枯竭(2)
+    参数异常(1),不支持的操作类型(2),
     
     ;
     public final int flag;

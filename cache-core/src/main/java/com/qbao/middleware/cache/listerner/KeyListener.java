@@ -7,7 +7,7 @@ import java.util.EventListener;
 
 import com.qbao.middleware.cache.event.redis.key.KeyDelEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyExistsEvent;
-import com.qbao.middleware.cache.event.redis.key.KeyExpireAt;
+import com.qbao.middleware.cache.event.redis.key.KeyExpireAtEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyExpirtEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyScanEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyTtlEvent;
@@ -29,7 +29,7 @@ public interface KeyListener extends EventListener {
 
     boolean handleEvent(KeyExpirtEvent e);
 
-    boolean handleEvent(KeyExpireAt e);
+    boolean handleEvent(KeyExpireAtEvent e);
 
     boolean handleEvent(KeyTypeEvent e);
 

@@ -29,17 +29,17 @@ public interface IKeyClient extends ICacheClient {
     // RESTORE
     // SORT
 
-    void del(String key) throws CacheCodeException;
+    Long del(String key) throws CacheCodeException;
 
-    void exists(String key) throws CacheCodeException;
+    Boolean exists(String key) throws CacheCodeException;
 
-    void ttl(String key) throws CacheCodeException;
+    Long ttl(String key) throws CacheCodeException;
 
-    void expire(String key) throws CacheCodeException;
+    Long expire(String key, int seconds) throws CacheCodeException;
 
-    void expireAt(String key) throws CacheCodeException;
+    Long expireAt(String key, long unixTime) throws CacheCodeException;
 
-    void type(String key) throws CacheCodeException;
+    String type(String key) throws CacheCodeException;
 
     void scan(String pettey) throws CacheCodeException;
 

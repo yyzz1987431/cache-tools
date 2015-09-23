@@ -11,7 +11,7 @@ import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
  * @description TODO
  * @version 1.0
  */
-public class KeyExpireAt extends RedisBaseEvent {
+public class KeyExpireAtEvent extends RedisBaseEvent {
 
     public final long unixTime;
     public Long result;
@@ -20,7 +20,7 @@ public class KeyExpireAt extends RedisBaseEvent {
      * @param key
      * @param source
      */
-    public KeyExpireAt(String key,long unixTime, Object source) {
+    public KeyExpireAtEvent(String key,long unixTime, Object source) {
         super(key, source);
         this.unixTime = unixTime;
     }

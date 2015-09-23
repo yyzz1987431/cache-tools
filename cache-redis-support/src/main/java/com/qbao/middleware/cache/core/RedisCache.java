@@ -16,7 +16,7 @@ import com.qbao.middleware.cache.event.redis.hash.HashLenEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashSetEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyDelEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyExistsEvent;
-import com.qbao.middleware.cache.event.redis.key.KeyExpireAt;
+import com.qbao.middleware.cache.event.redis.key.KeyExpireAtEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyExpirtEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyScanEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyTtlEvent;
@@ -486,7 +486,7 @@ public class RedisCache implements StringListener, HashListener, KeyListener {
      * middleware.cache.event.redis.key.KeyExpireAt)
      */
     @Override
-    public boolean handleEvent(KeyExpireAt e) {
+    public boolean handleEvent(KeyExpireAtEvent e) {
         Jedis client = this.getClient();
         if (client == null) {
             return false;
