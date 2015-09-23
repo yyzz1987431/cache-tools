@@ -16,9 +16,15 @@ import com.qbao.middleware.cache.exception.CacheCodeException;
  */
 public interface IKeyValueClient extends ICacheClient {
 
-    <T extends Serializable> void set(String key, T data) throws CacheCodeException;
+    <T extends Serializable> void set(String key, T data)
+            throws CacheCodeException;
 
-    <T extends Serializable> void set(String key, T data, Integer time) throws CacheCodeException;
+    <T extends Serializable> void set(String key, T data, Integer time)
+            throws CacheCodeException;
 
-    <T extends Serializable> T get(String key, Class<T> clazz) throws CacheCodeException;
+    <T extends Serializable> T get(String key, Class<T> clazz)
+            throws CacheCodeException;
+
+    void append(String key, String appendStr) throws CacheCodeException;
+
 }
