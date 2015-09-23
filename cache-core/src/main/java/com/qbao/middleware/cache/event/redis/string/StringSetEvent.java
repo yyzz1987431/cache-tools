@@ -1,9 +1,9 @@
 /**
  * SetEvent.java
  */
-package com.qbao.middleware.cache.event;
+package com.qbao.middleware.cache.event.redis.string;
 
-import java.util.EventObject;
+import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
 
 /**
  * @author Yate
@@ -11,18 +11,16 @@ import java.util.EventObject;
  * @description TODO
  * @version 1.0
  */
-public class SetOptEvent extends EventObject {
+public class StringSetEvent extends RedisBaseEvent {
 
-    public final String key;
     public final Object data;
     public final Integer expriedSec;
 
     /**
      * @param source
      */
-    public SetOptEvent(String key, Object data, Integer expriedSec, Object source) {
-        super(source);
-        this.key = key;
+    public StringSetEvent(String key, Object data, Integer expriedSec, Object source) {
+        super(key,source);
         this.data = data;
         this.expriedSec = expriedSec;
     }

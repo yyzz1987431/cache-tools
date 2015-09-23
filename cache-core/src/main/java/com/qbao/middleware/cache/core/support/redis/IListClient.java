@@ -1,7 +1,7 @@
 /**
  * IListClient.java
  */
-package com.qbao.middleware.cache.core.support;
+package com.qbao.middleware.cache.core.support.redis;
 
 import java.io.Serializable;
 
@@ -16,10 +16,10 @@ import com.qbao.middleware.cache.exception.CacheCodeException;
  */
 public interface IListClient extends ICacheClient {
 
-    <T extends Serializable> void lSet(String key, Integer index, T data)
+    <T extends Serializable> void set(String key, Integer index, T data)
             throws CacheCodeException;
 
-    <T extends Serializable> void lPop(String key, Class<T> clazz)
+    <T extends Serializable> void pop(String key, Class<T> clazz)
             throws CacheCodeException;
 
     // LPUSH key value [value ...]

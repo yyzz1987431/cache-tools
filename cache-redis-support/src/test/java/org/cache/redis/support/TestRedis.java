@@ -12,7 +12,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import com.qbao.middleware.cache.core.RedisCache;
 import com.qbao.middleware.cache.exception.CacheCodeException;
-import com.qbao.middleware.cache.utils.KeyValueUtils;
+import com.qbao.middleware.cache.utils.StringUtils;
 
 /**
  * @author Yate
@@ -43,7 +43,7 @@ public class TestRedis {
 
         RedisCache redis = new RedisCache(jedisPool);
 
-        KeyValueUtils key = new KeyValueUtils();
+        StringUtils key = new StringUtils();
         try {
             key.registerListener("test", redis);
             
