@@ -15,7 +15,7 @@ public class StringSetEvent extends RedisBaseEvent {
 
     public final Object data;
     public final Integer expriedSec;
-
+    public String result;
     /**
      * @param source
      */

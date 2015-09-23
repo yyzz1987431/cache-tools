@@ -36,11 +36,12 @@ import com.qbao.middleware.cache.listener.StringListener;
  * @description TODO
  * @version 1.0
  */
-public class RedisCacheClient implements StringListener, HashListener, KeyListener {
+public class RedisCommandHandle implements StringListener, HashListener,
+        KeyListener {
 
     protected JedisPool redisPool;
 
-    public RedisCacheClient(final JedisPool pool) {
+    public RedisCommandHandle(final JedisPool pool) {
         if (pool == null)
             throw new NullPointerException();
         this.redisPool = pool;
@@ -57,12 +58,16 @@ public class RedisCacheClient implements StringListener, HashListener, KeyListen
         }
 
         try {
+            String x = null;
             if (e.expriedSec == null || e.expriedSec.intValue() <= 0l)
-                client.set(e.key, JSON.toJSONString(e.data));
+                x = client.set(e.key, JSON.toJSONString(e.data));
             else
-                client.set(e.key, JSON.toJSONString(e.data), "NX", "EX",
+                x = client.set(e.key, JSON.toJSONString(e.data), "NX", "EX",
                         e.expriedSec.intValue());
-
+            if (x == null || x.trim().equals(""))
+                return false;
+            
+            e.result = x;
         } finally {
             if (client != null && client.isConnected()) {
                 client.close();

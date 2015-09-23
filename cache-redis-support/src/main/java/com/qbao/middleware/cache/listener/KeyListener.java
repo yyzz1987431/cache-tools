@@ -3,8 +3,6 @@
  */
 package com.qbao.middleware.cache.listener;
 
-import java.util.EventListener;
-
 import com.qbao.middleware.cache.event.redis.key.KeyDelEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyExistsEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyExpireAtEvent;
@@ -12,6 +10,7 @@ import com.qbao.middleware.cache.event.redis.key.KeyExpirtEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyScanEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyTtlEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyTypeEvent;
+import com.qbao.middleware.cache.listerner.CacheListener;
 
 /**
  * @author Yate
@@ -19,7 +18,7 @@ import com.qbao.middleware.cache.event.redis.key.KeyTypeEvent;
  * @description TODO
  * @version 1.0
  */
-public interface KeyListener extends EventListener {
+public interface KeyListener extends CacheListener {
 
     boolean handleEvent(KeyDelEvent e);
 

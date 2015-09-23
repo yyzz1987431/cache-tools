@@ -3,13 +3,12 @@
  */
 package com.qbao.middleware.cache.listener;
 
-import java.util.EventListener;
-
 import com.qbao.middleware.cache.event.redis.string.StringAppendEvent;
 import com.qbao.middleware.cache.event.redis.string.StringDecrEvent;
 import com.qbao.middleware.cache.event.redis.string.StringGetEvent;
 import com.qbao.middleware.cache.event.redis.string.StringIncrEvent;
 import com.qbao.middleware.cache.event.redis.string.StringSetEvent;
+import com.qbao.middleware.cache.listerner.CacheListener;
 
 /**
  * @author Yate
@@ -17,7 +16,7 @@ import com.qbao.middleware.cache.event.redis.string.StringSetEvent;
  * @description TODO
  * @version 1.0
  */
-public interface StringListener extends EventListener {
+public interface StringListener extends CacheListener {
 
     boolean handleEvent(StringSetEvent e);
 

@@ -9,7 +9,7 @@ package com.qbao.middleware.cache.exception;
  * @description TODO
  * @version 1.0
  */
-public class CacheCodeException extends Exception {
+public class CacheCodeException extends RuntimeException {
 
     public final String msg;
     public final CacheExceptionEnum code;

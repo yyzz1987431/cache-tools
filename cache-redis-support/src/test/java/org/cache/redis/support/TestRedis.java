@@ -10,7 +10,7 @@ import org.junit.Test;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-import com.qbao.middleware.cache.core.RedisCacheClient;
+import com.qbao.middleware.cache.core.RedisCommandHandle;
 import com.qbao.middleware.cache.exception.CacheCodeException;
 import com.qbao.middleware.cache.utils.StringCommandUtils;
 
@@ -41,7 +41,7 @@ public class TestRedis {
         // 初始化连接池
         JedisPool jedisPool = new JedisPool(config, "127.0.0.1", 6379);
 
-        RedisCacheClient redis = new RedisCacheClient(jedisPool);
+        RedisCommandHandle redis = new RedisCommandHandle(jedisPool);
 
         StringCommandUtils key = new StringCommandUtils();
         try {

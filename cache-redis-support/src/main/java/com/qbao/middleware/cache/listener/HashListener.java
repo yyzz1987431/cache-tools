@@ -3,8 +3,6 @@
  */
 package com.qbao.middleware.cache.listener;
 
-import java.util.EventListener;
-
 import com.qbao.middleware.cache.event.redis.hash.HashDelEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashExistsEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashGetEvent;
@@ -12,6 +10,7 @@ import com.qbao.middleware.cache.event.redis.hash.HashIncrByEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashIncrByFloatEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashLenEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashSetEvent;
+import com.qbao.middleware.cache.listerner.CacheListener;
 
 /**
  * @author Yate
@@ -19,7 +18,7 @@ import com.qbao.middleware.cache.event.redis.hash.HashSetEvent;
  * @description TODO
  * @version 1.0
  */
-public interface HashListener extends EventListener {
+public interface HashListener extends CacheListener {
 
     boolean handleEvent(HashExistsEvent e);
 
