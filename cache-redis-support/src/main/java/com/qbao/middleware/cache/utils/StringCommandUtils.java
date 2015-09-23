@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.qbao.middleware.cache.core.support.redis.IStringClient;
+import com.qbao.middleware.cache.core.support.redis.IStringCommand;
 import com.qbao.middleware.cache.event.redis.string.StringAppendEvent;
 import com.qbao.middleware.cache.event.redis.string.StringDecrEvent;
 import com.qbao.middleware.cache.event.redis.string.StringGetEvent;
@@ -15,7 +15,7 @@ import com.qbao.middleware.cache.event.redis.string.StringIncrEvent;
 import com.qbao.middleware.cache.event.redis.string.StringSetEvent;
 import com.qbao.middleware.cache.exception.CacheCodeException;
 import com.qbao.middleware.cache.exception.CacheExceptionEnum;
-import com.qbao.middleware.cache.listerner.StringListener;
+import com.qbao.middleware.cache.listener.StringListener;
 
 /**
  * @author Yate
@@ -23,7 +23,7 @@ import com.qbao.middleware.cache.listerner.StringListener;
  * @description TODO
  * @version 1.0
  */
-public class StringUtils implements IStringClient {
+public class StringCommandUtils implements IStringCommand {
 
     protected final Map<String, StringListener> handles = new HashMap<String, StringListener>();
 

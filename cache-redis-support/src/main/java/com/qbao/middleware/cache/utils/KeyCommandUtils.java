@@ -6,7 +6,7 @@ package com.qbao.middleware.cache.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.qbao.middleware.cache.core.support.redis.IKeyClient;
+import com.qbao.middleware.cache.core.support.redis.IKeyCommand;
 import com.qbao.middleware.cache.event.redis.key.KeyDelEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyExistsEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyExpireAtEvent;
@@ -15,7 +15,7 @@ import com.qbao.middleware.cache.event.redis.key.KeyTtlEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyTypeEvent;
 import com.qbao.middleware.cache.exception.CacheCodeException;
 import com.qbao.middleware.cache.exception.CacheExceptionEnum;
-import com.qbao.middleware.cache.listerner.KeyListener;
+import com.qbao.middleware.cache.listener.KeyListener;
 
 /**
  * @author Yate
@@ -23,7 +23,7 @@ import com.qbao.middleware.cache.listerner.KeyListener;
  * @description TODO
  * @version 1.0
  */
-public class KeyUtils implements IKeyClient {
+public class KeyCommandUtils implements IKeyCommand {
 
     protected final Map<String, KeyListener> handles = new HashMap<String, KeyListener>();
 

@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.qbao.middleware.cache.core.support.redis.IHashClient;
+import com.qbao.middleware.cache.core.support.redis.IHashCommand;
 import com.qbao.middleware.cache.event.redis.hash.HashDelEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashExistsEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashGetEvent;
@@ -17,7 +17,7 @@ import com.qbao.middleware.cache.event.redis.hash.HashLenEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashSetEvent;
 import com.qbao.middleware.cache.exception.CacheCodeException;
 import com.qbao.middleware.cache.exception.CacheExceptionEnum;
-import com.qbao.middleware.cache.listerner.HashListener;
+import com.qbao.middleware.cache.listener.HashListener;
 
 /**
  * @author Yate
@@ -25,7 +25,7 @@ import com.qbao.middleware.cache.listerner.HashListener;
  * @description TODO
  * @version 1.0
  */
-public class HashUtils implements IHashClient {
+public class HashCommandUtils implements IHashCommand {
 
     protected final Map<String, HashListener> handles = new HashMap<String, HashListener>();
 

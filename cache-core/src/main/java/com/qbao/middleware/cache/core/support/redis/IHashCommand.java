@@ -5,7 +5,7 @@ package com.qbao.middleware.cache.core.support.redis;
 
 import java.io.Serializable;
 
-import com.qbao.middleware.cache.core.ICacheClient;
+import com.qbao.middleware.cache.core.ICacheCommand;
 import com.qbao.middleware.cache.exception.CacheCodeException;
 
 /**
@@ -14,7 +14,7 @@ import com.qbao.middleware.cache.exception.CacheCodeException;
  * @description TODO
  * @version 1.0
  */
-public interface IHashClient extends ICacheClient {
+public interface IHashCommand extends ICacheCommand {
 
     // Hash（哈希表）
     // HGETALL

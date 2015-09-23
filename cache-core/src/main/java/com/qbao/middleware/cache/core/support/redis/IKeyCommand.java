@@ -3,7 +3,7 @@
  */
 package com.qbao.middleware.cache.core.support.redis;
 
-import com.qbao.middleware.cache.core.ICacheClient;
+import com.qbao.middleware.cache.core.ICacheCommand;
 import com.qbao.middleware.cache.exception.CacheCodeException;
 
 /**
@@ -12,7 +12,7 @@ import com.qbao.middleware.cache.exception.CacheCodeException;
  * @description TODO
  * @version 1.0
  */
-public interface IKeyClient extends ICacheClient {
+public interface IKeyCommand extends ICacheCommand {
     // Key（键）
     // DUMP
     // EXISTS
