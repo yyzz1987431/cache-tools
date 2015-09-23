@@ -64,17 +64,19 @@ public class RedisCommandHandle implements StringListener, HashListener,
             else
                 x = client.set(e.key, JSON.toJSONString(e.data), "NX", "EX",
                         e.expriedSec.intValue());
-            if (x == null || x.trim().equals(""))
-                return false;
-            
-            e.result = x;
+            if (x != null && x.trim().equalsIgnoreCase("OK")) {
+                e.result = x;
+                return true;
+            }
+        } catch (Exception ex) {
+            return false;
         } finally {
             if (client != null && client.isConnected()) {
                 client.close();
             }
         }
 
-        return true;
+        return false;
     }
 
     public <T> boolean handleEvent(StringGetEvent<T> e) {
@@ -88,6 +90,8 @@ public class RedisCommandHandle implements StringListener, HashListener,
             if (v == null || v.trim().equals(""))
                 return false;
             e.result = JSON.parseObject(v, e.targetClass);
+        } catch (Exception ex) {
+            return false;
         } finally {
             if (client != null && client.isConnected()) {
                 client.close();

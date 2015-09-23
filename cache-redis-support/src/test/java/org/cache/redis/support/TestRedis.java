@@ -12,6 +12,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import com.qbao.middleware.cache.core.RedisCommandHandle;
 import com.qbao.middleware.cache.exception.CacheCodeException;
+import com.qbao.middleware.cache.utils.CacheRedisUtils;
 import com.qbao.middleware.cache.utils.StringCommandUtils;
 
 /**
@@ -21,13 +22,13 @@ import com.qbao.middleware.cache.utils.StringCommandUtils;
  * @version 1.0
  */
 public class TestRedis {
-    
+
     public static class TestA implements Serializable {
 
         public String a;
         public Long b;
     }
-    
+
     @Test
     public void init() {
         JedisPoolConfig config = new JedisPoolConfig();
@@ -39,29 +40,33 @@ public class TestRedis {
         config.setMaxWaitMillis(30000);
 
         // 初始化连接池
-        JedisPool jedisPool = new JedisPool(config, "127.0.0.1", 6379);
+        JedisPool jedisPool1 = new JedisPool(config, "192.168.56.100", 6379);
+        JedisPool jedisPool2 = new JedisPool(config, "127.0.0.1", 6379);
 
-        RedisCommandHandle redis = new RedisCommandHandle(jedisPool);
+        RedisCommandHandle redis1 = new RedisCommandHandle(jedisPool1);
+        RedisCommandHandle redis2 = new RedisCommandHandle(jedisPool2);
 
-        StringCommandUtils key = new StringCommandUtils();
+        CacheRedisUtils key = new CacheRedisUtils();
         try {
-            key.registerListener("test", redis);
-            
-            for(int i=0;i<10;i++){
-                key.set("yate"+i, "yate",10000);
-                
+            key.registerListener("test1", redis1);
+            key.registerListener("test2", redis2);
+
+            System.out.println(key.get("yate1", String.class));
+            for (int i = 0; i < 10; i++) {
+                key.<String> set("yate" + i, "yate", 10000);
+
                 TestA a = new TestA();
-                a.a="hahaha";
-                a.b=11111L;
-                
-                key.<TestA>set("yate_"+i, a,10000);
+                a.a = "hahaha";
+                a.b = 11111L;
+
+                key.<TestA> set("yate_" + i, a, 10000);
             }
-            
+
             System.out.println(key.get("yate1", String.class));
             TestA x = key.get("yate_1", TestA.class);
             System.out.println(x.a);
             System.out.println(x.b);
-            
+
         } catch (CacheCodeException e) {
             e.printStackTrace();
         }

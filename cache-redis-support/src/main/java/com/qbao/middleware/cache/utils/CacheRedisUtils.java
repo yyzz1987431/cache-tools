@@ -114,6 +114,7 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
     @Override
     public <T extends Serializable> void set(String key, T data, Integer time)
             throws CacheCodeException {
+        this.strUtils.set(key, data, time);
     }
 
     /*
@@ -126,7 +127,7 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
     @Override
     public <T extends Serializable> T get(String key, Class<T> clazz)
             throws CacheCodeException {
-        return null;
+        return this.strUtils.get(key, clazz);
     }
 
     /*
