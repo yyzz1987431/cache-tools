@@ -5,7 +5,7 @@ package com.qbao.middleware.cache.core.support.redis;
 
 import java.io.Serializable;
 
-import com.qbao.middleware.cache.core.ICacheClient;
+import com.qbao.middleware.cache.core.ICacheCommand;
 import com.qbao.middleware.cache.exception.CacheCodeException;
 
 /**
@@ -14,7 +14,7 @@ import com.qbao.middleware.cache.exception.CacheCodeException;
  * @description TODO
  * @version 1.0
  */
-public interface IListClient extends ICacheClient {
+public interface IListCommand extends ICacheCommand {
 
     <T extends Serializable> void set(String key, Integer index, T data)
             throws CacheCodeException;

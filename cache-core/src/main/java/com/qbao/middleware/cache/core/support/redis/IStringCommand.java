@@ -5,7 +5,7 @@ package com.qbao.middleware.cache.core.support.redis;
 
 import java.io.Serializable;
 
-import com.qbao.middleware.cache.core.ICacheClient;
+import com.qbao.middleware.cache.core.ICacheCommand;
 import com.qbao.middleware.cache.exception.CacheCodeException;
 
 /**
@@ -14,7 +14,7 @@ import com.qbao.middleware.cache.exception.CacheCodeException;
  * @description TODO
  * @version 1.0
  */
-public interface IStringClient extends ICacheClient {
+public interface IStringCommand extends ICacheCommand {
 
     // String（字符串）
     // BITCOUNT

@@ -26,9 +26,9 @@ import com.qbao.middleware.cache.event.redis.string.StringDecrEvent;
 import com.qbao.middleware.cache.event.redis.string.StringGetEvent;
 import com.qbao.middleware.cache.event.redis.string.StringIncrEvent;
 import com.qbao.middleware.cache.event.redis.string.StringSetEvent;
-import com.qbao.middleware.cache.listerner.HashListener;
-import com.qbao.middleware.cache.listerner.KeyListener;
-import com.qbao.middleware.cache.listerner.StringListener;
+import com.qbao.middleware.cache.listener.HashListener;
+import com.qbao.middleware.cache.listener.KeyListener;
+import com.qbao.middleware.cache.listener.StringListener;
 
 /**
  * @author Yate
@@ -36,11 +36,11 @@ import com.qbao.middleware.cache.listerner.StringListener;
  * @description TODO
  * @version 1.0
  */
-public class RedisCache implements StringListener, HashListener, KeyListener {
+public class RedisCacheClient implements StringListener, HashListener, KeyListener {
 
     protected JedisPool redisPool;
 
-    public RedisCache(final JedisPool pool) {
+    public RedisCacheClient(final JedisPool pool) {
         if (pool == null)
             throw new NullPointerException();
         this.redisPool = pool;

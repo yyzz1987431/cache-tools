@@ -10,6 +10,6 @@ package com.qbao.middleware.cache.core;
  * @description TODO
  * @version 1.0
  */
-public interface ICacheClient{
+public interface ICacheCommand{
 
 }
