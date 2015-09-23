@@ -1,7 +1,7 @@
 /**
  * IKeyValueCache.java
  */
-package com.qbao.middleware.cache.core.support;
+package com.qbao.middleware.cache.core.support.redis;
 
 import java.io.Serializable;
 
@@ -14,7 +14,24 @@ import com.qbao.middleware.cache.exception.CacheCodeException;
  * @description TODO
  * @version 1.0
  */
-public interface IKeyValueClient extends ICacheClient {
+public interface IStringClient extends ICacheClient {
+
+    // String（字符串）
+    // BITCOUNT
+    // BITOP
+    // GETBIT
+    // GETRANGE
+    // GETSET
+    // INCRBYFLOAT
+    // MGET
+    // MSET
+    // MSETNX
+    // PSETEX
+    // SETBIT
+    // SETEX
+    // SETNX
+    // SETRANGE
+    // STRLEN
 
     <T extends Serializable> void set(String key, T data)
             throws CacheCodeException;
@@ -27,4 +44,11 @@ public interface IKeyValueClient extends ICacheClient {
 
     void append(String key, String appendStr) throws CacheCodeException;
 
+    void decr(String key) throws CacheCodeException;
+
+    void decrBy(String key, Integer v) throws CacheCodeException;
+
+    void incr(String key) throws CacheCodeException;
+
+    void incrBy(String key, Integer v) throws CacheCodeException;
 }
