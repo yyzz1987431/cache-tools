@@ -41,7 +41,19 @@ public class RedisCommandHandle implements StringListener, HashListener,
 
     protected JedisPool redisPool;
 
-    public RedisCommandHandle(final JedisPool pool) {
+    public RedisCommandHandle() {
+
+    }
+
+    public JedisPool getRedisPool() {
+        return redisPool;
+    }
+
+    public void setRedisPool(JedisPool redisPool) {
+        this.redisPool = redisPool;
+    }
+
+    public RedisCommandHandle(JedisPool pool) {
         if (pool == null)
             throw new NullPointerException();
         this.redisPool = pool;
