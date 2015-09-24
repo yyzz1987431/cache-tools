@@ -3,8 +3,6 @@
  */
 package com.qbao.middleware.cache.core.support.redis;
 
-import java.io.Serializable;
-
 import com.qbao.middleware.cache.core.ICacheCommand;
 import com.qbao.middleware.cache.exception.CacheCodeException;
 
@@ -16,13 +14,39 @@ import com.qbao.middleware.cache.exception.CacheCodeException;
  */
 public interface IListCommand extends ICacheCommand {
 
-    <T extends Serializable> void set(String key, Integer index, T data)
-            throws CacheCodeException;
+    // List（列表）
+    // BRPOPLPUSH
+    // LINSERT
+    // LPUSHX
+    // LRANGE
+    // LREM
+    // LSET
+    // LTRIM
+    // RPUSHX
 
-    <T extends Serializable> void pop(String key, Class<T> clazz)
-            throws CacheCodeException;
+    void bLPop(String key, int timeOut) throws CacheCodeException;
 
-    // LPUSH key value [value ...]
-    // <T extends Serializable> T lPush(String key, Class<T> clazz) throws
-    // CacheCodeException;
+    void bLPop(String[] keys, int timeOut) throws CacheCodeException;
+
+    void bRPop(String key, int timeOut) throws CacheCodeException;
+
+    void bRPop(String[] keys, int timeOut) throws CacheCodeException;
+
+    void bRPopLpush() throws CacheCodeException;
+
+    void lindex() throws CacheCodeException;
+
+    void lLen() throws CacheCodeException;
+
+    void lPop() throws CacheCodeException;
+
+    void rPop() throws CacheCodeException;
+
+    void lPush() throws CacheCodeException;
+
+    void rPush() throws CacheCodeException;
+
+    void lInsert() throws CacheCodeException;
+
+    void rPopLPush() throws CacheCodeException;
 }
