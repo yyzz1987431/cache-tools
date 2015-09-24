@@ -4,10 +4,30 @@
 package com.qbao.middleware.cache.utils;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.qbao.middleware.cache.core.support.redis.IHashCommand;
 import com.qbao.middleware.cache.core.support.redis.IKeyCommand;
 import com.qbao.middleware.cache.core.support.redis.IStringCommand;
+import com.qbao.middleware.cache.event.redis.hash.HashDelEvent;
+import com.qbao.middleware.cache.event.redis.hash.HashExistsEvent;
+import com.qbao.middleware.cache.event.redis.hash.HashGetEvent;
+import com.qbao.middleware.cache.event.redis.hash.HashIncrByEvent;
+import com.qbao.middleware.cache.event.redis.hash.HashIncrByFloatEvent;
+import com.qbao.middleware.cache.event.redis.hash.HashLenEvent;
+import com.qbao.middleware.cache.event.redis.hash.HashSetEvent;
+import com.qbao.middleware.cache.event.redis.key.KeyDelEvent;
+import com.qbao.middleware.cache.event.redis.key.KeyExistsEvent;
+import com.qbao.middleware.cache.event.redis.key.KeyExpireAtEvent;
+import com.qbao.middleware.cache.event.redis.key.KeyExpirtEvent;
+import com.qbao.middleware.cache.event.redis.key.KeyTtlEvent;
+import com.qbao.middleware.cache.event.redis.key.KeyTypeEvent;
+import com.qbao.middleware.cache.event.redis.string.StringAppendEvent;
+import com.qbao.middleware.cache.event.redis.string.StringDecrEvent;
+import com.qbao.middleware.cache.event.redis.string.StringGetEvent;
+import com.qbao.middleware.cache.event.redis.string.StringIncrEvent;
+import com.qbao.middleware.cache.event.redis.string.StringSetEvent;
 import com.qbao.middleware.cache.exception.CacheCodeException;
 import com.qbao.middleware.cache.exception.CacheExceptionEnum;
 import com.qbao.middleware.cache.listener.HashListener;
@@ -24,72 +44,88 @@ import com.qbao.middleware.cache.listerner.CacheListener;
 public class CacheRedisUtils implements IHashCommand, IKeyCommand,
         IStringCommand {
 
-    protected final KeyCommandUtils keyUtils = new KeyCommandUtils();
-    protected final StringCommandUtils strUtils = new StringCommandUtils();
-    protected final HashCommandUtils hashUtils = new HashCommandUtils();
+    protected final Map<String, CacheListener> handles = new HashMap<String, CacheListener>();
+
+    // protected final KeyCommandUtils keyUtils = new KeyCommandUtils();
+    // protected final StringCommandUtils strUtils = new StringCommandUtils();
+    // protected final HashCommandUtils hashUtils = new HashCommandUtils();
 
     public void registerListener(String key, CacheListener l)
             throws CacheCodeException {
         if (key == null || l == null || key.trim().equals(""))
             throw new CacheCodeException(CacheExceptionEnum.参数异常);
 
-        if (l instanceof KeyListener) {
-            keyUtils.registerListener(key, (KeyListener) l);
+        if (!handles.containsKey(key)) {
+            synchronized (this) {
+                if (!handles.containsKey(key)) {
+                    handles.put(key, l);
+                }
+            }
         }
-        if (l instanceof StringListener) {
-            strUtils.registerListener(key, (StringListener) l);
-        }
-        if (l instanceof HashListener) {
-            hashUtils.registerListener(key, (HashListener) l);
-        }
+
+        // if (l instanceof KeyListener) {
+        // keyUtils.registerListener(key, (KeyListener) l);
+        // }
+        // if (l instanceof StringListener) {
+        // strUtils.registerListener(key, (StringListener) l);
+        // }
+        // if (l instanceof HashListener) {
+        // hashUtils.registerListener(key, (HashListener) l);
+        // }
     }
 
-    public void registerKeyListener(String key, KeyListener l)
-            throws CacheCodeException {
-        if (key == null || l == null || key.trim().equals(""))
-            throw new CacheCodeException(CacheExceptionEnum.参数异常);
-        keyUtils.registerListener(key, l);
-    }
-
-    public void registerStringListener(String key, StringListener l)
-            throws CacheCodeException {
-        if (key == null || l == null || key.trim().equals(""))
-            throw new CacheCodeException(CacheExceptionEnum.参数异常);
-        strUtils.registerListener(key, l);
-    }
-
-    public void registerHashListener(String key, HashListener l)
-            throws CacheCodeException {
-        if (key == null || l == null || key.trim().equals(""))
-            throw new CacheCodeException(CacheExceptionEnum.参数异常);
-        hashUtils.registerListener(key, l);
-    }
+    // public void registerKeyListener(String key, KeyListener l)
+    // throws CacheCodeException {
+    // if (key == null || l == null || key.trim().equals(""))
+    // throw new CacheCodeException(CacheExceptionEnum.参数异常);
+    // keyUtils.registerListener(key, l);
+    // }
+    //
+    // public void registerStringListener(String key, StringListener l)
+    // throws CacheCodeException {
+    // if (key == null || l == null || key.trim().equals(""))
+    // throw new CacheCodeException(CacheExceptionEnum.参数异常);
+    // strUtils.registerListener(key, l);
+    // }
+    //
+    // public void registerHashListener(String key, HashListener l)
+    // throws CacheCodeException {
+    // if (key == null || l == null || key.trim().equals(""))
+    // throw new CacheCodeException(CacheExceptionEnum.参数异常);
+    // hashUtils.registerListener(key, l);
+    // }
 
     public void unregisterListener(String key) throws CacheCodeException {
         if (key == null || key.trim().equals(""))
             throw new CacheCodeException(CacheExceptionEnum.参数异常);
-        keyUtils.unregisterListener(key);
-        strUtils.unregisterListener(key);
-        hashUtils.unregisterListener(key);
+        // keyUtils.unregisterListener(key);
+        // strUtils.unregisterListener(key);
+        // hashUtils.unregisterListener(key);
+
+        if (handles.containsKey(key)) {
+            handles.remove(key);
+        }
     }
 
-    public void unregisterKeyListener(String key) throws CacheCodeException {
-        if (key == null || key.trim().equals(""))
-            throw new CacheCodeException(CacheExceptionEnum.参数异常);
-        keyUtils.unregisterListener(key);
-    }
-
-    public void unregisterStringListener(String key) throws CacheCodeException {
-        if (key == null || key.trim().equals(""))
-            throw new CacheCodeException(CacheExceptionEnum.参数异常);
-        strUtils.unregisterListener(key);
-    }
-
-    public void unregisterHashListener(String key) throws CacheCodeException {
-        if (key == null || key.trim().equals(""))
-            throw new CacheCodeException(CacheExceptionEnum.参数异常);
-        hashUtils.unregisterListener(key);
-    }
+    // public void unregisterKeyListener(String key) throws CacheCodeException {
+    // if (key == null || key.trim().equals(""))
+    // throw new CacheCodeException(CacheExceptionEnum.参数异常);
+    // keyUtils.unregisterListener(key);
+    // }
+    //
+    // public void unregisterStringListener(String key) throws
+    // CacheCodeException {
+    // if (key == null || key.trim().equals(""))
+    // throw new CacheCodeException(CacheExceptionEnum.参数异常);
+    // strUtils.unregisterListener(key);
+    // }
+    //
+    // public void unregisterHashListener(String key) throws CacheCodeException
+    // {
+    // if (key == null || key.trim().equals(""))
+    // throw new CacheCodeException(CacheExceptionEnum.参数异常);
+    // hashUtils.unregisterListener(key);
+    // }
 
     /*
      * (non-Javadoc)
@@ -101,7 +137,7 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
     @Override
     public <T extends Serializable> void set(String key, T data)
             throws CacheCodeException {
-        this.strUtils.set(key, data);
+        this.set(key, data, null);
     }
 
     /*
@@ -114,7 +150,18 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
     @Override
     public <T extends Serializable> void set(String key, T data, Integer time)
             throws CacheCodeException {
-        this.strUtils.set(key, data, time);
+        if (key == null || data == null || key.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        StringSetEvent e = new StringSetEvent(key, data, time, this);
+
+        for (CacheListener l : handles.values()) {
+            if (l instanceof StringListener) {
+                if (((StringListener) l).handleEvent(e))
+                    break;
+            }
+        }
     }
 
     /*
@@ -127,7 +174,18 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
     @Override
     public <T extends Serializable> T get(String key, Class<T> clazz)
             throws CacheCodeException {
-        return this.strUtils.get(key, clazz);
+        if (key == null || clazz == null || key.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        StringGetEvent<T> e = new StringGetEvent<T>(key, clazz, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof StringListener) {
+                if (((StringListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
     /*
@@ -139,6 +197,16 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public void append(String key, String appendStr) throws CacheCodeException {
+        if (key == null || appendStr == null || key.trim().equalsIgnoreCase("")
+                || appendStr.trim().equalsIgnoreCase(""))
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        StringAppendEvent e = new StringAppendEvent(key, appendStr, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof StringListener) {
+                if (((StringListener) l).handleEvent(e))
+                    break;
+            }
+        }
     }
 
     /*
@@ -150,6 +218,17 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public void decr(String key) throws CacheCodeException {
+        if (key == null || key.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        StringDecrEvent e = new StringDecrEvent(key, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof StringListener) {
+                if (((StringListener) l).handleEvent(e))
+                    break;
+            }
+        }
     }
 
     /*
@@ -161,6 +240,18 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public void decrBy(String key, Integer v) throws CacheCodeException {
+        if (key == null || key.trim().equalsIgnoreCase("") || v == null
+                || v.intValue() >= 0) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        StringDecrEvent e = new StringDecrEvent(key, v, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof StringListener) {
+                if (((StringListener) l).handleEvent(e))
+                    break;
+            }
+        }
     }
 
     /*
@@ -172,6 +263,17 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public void incr(String key) throws CacheCodeException {
+        if (key == null || key.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        StringIncrEvent e = new StringIncrEvent(key, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof StringListener) {
+                if (((StringListener) l).handleEvent(e))
+                    break;
+            }
+        }
     }
 
     /*
@@ -183,6 +285,18 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public void incrBy(String key, Integer v) throws CacheCodeException {
+        if (key == null || key.trim().equalsIgnoreCase("") || v == null
+                || v.intValue() <= 0) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        StringIncrEvent e = new StringIncrEvent(key, v, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof StringListener) {
+                if (((StringListener) l).handleEvent(e))
+                    break;
+            }
+        }
     }
 
     /*
@@ -194,7 +308,18 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public Long del(String key) throws CacheCodeException {
-        return this.keyUtils.del(key);
+        if (key == null || key.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        KeyDelEvent e = new KeyDelEvent(key, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof KeyListener) {
+                if (((KeyListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
     /*
@@ -206,7 +331,18 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public Boolean exists(String key) throws CacheCodeException {
-        return null;
+        if (key == null || key.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        KeyExistsEvent e = new KeyExistsEvent(key, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof KeyListener) {
+                if (((KeyListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
     /*
@@ -218,7 +354,18 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public Long ttl(String key) throws CacheCodeException {
-        return null;
+        if (key == null || key.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        KeyTtlEvent e = new KeyTtlEvent(key, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof KeyListener) {
+                if (((KeyListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
     /*
@@ -230,7 +377,18 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public Long expire(String key, int seconds) throws CacheCodeException {
-        return null;
+        if (key == null || key.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        KeyExpirtEvent e = new KeyExpirtEvent(key, seconds, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof KeyListener) {
+                if (((KeyListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
     /*
@@ -242,7 +400,18 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public Long expireAt(String key, long unixTime) throws CacheCodeException {
-        return null;
+        if (key == null || key.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        KeyExpireAtEvent e = new KeyExpireAtEvent(key, unixTime, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof KeyListener) {
+                if (((KeyListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
     /*
@@ -254,7 +423,18 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public String type(String key) throws CacheCodeException {
-        return null;
+        if (key == null || key.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        KeyTypeEvent e = new KeyTypeEvent(key, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof KeyListener) {
+                if (((KeyListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
     /*
@@ -266,6 +446,7 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public void scan(String pettey) throws CacheCodeException {
+        throw new CacheCodeException(CacheExceptionEnum.不支持的操作类型);
     }
 
     /*
@@ -277,7 +458,19 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public Boolean exists(String key, String field) throws CacheCodeException {
-        return null;
+        if (key == null || field == null || key.trim().equalsIgnoreCase("")
+                || field.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        HashExistsEvent e = new HashExistsEvent(key, field, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof HashListener) {
+                if (((HashListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
     /*
@@ -290,7 +483,19 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
     @Override
     public <T extends Serializable> T get(String key, String field,
             Class<T> clazz) throws CacheCodeException {
-        return null;
+        if (key == null || field == null || key.trim().equalsIgnoreCase("")
+                || field.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        HashGetEvent<T> e = new HashGetEvent<T>(key, field, clazz, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof HashListener) {
+                if (((HashListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
     /*
@@ -303,7 +508,19 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
     @Override
     public <T extends Serializable> Long set(String key, String field, T data)
             throws CacheCodeException {
-        return null;
+        if (key == null || data == null || key.trim().equalsIgnoreCase("")
+                || field == null || field.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        HashSetEvent e = new HashSetEvent(key, field, data, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof HashListener) {
+                if (((HashListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
     /*
@@ -315,7 +532,19 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public Long del(String key, String field) throws CacheCodeException {
-        return null;
+        if (key == null || key.trim().equalsIgnoreCase("") || field == null
+                || field.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        HashDelEvent e = new HashDelEvent(key, field, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof HashListener) {
+                if (((HashListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
     /*
@@ -328,7 +557,19 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
     @Override
     public Long incrBy(String key, String field, long v)
             throws CacheCodeException {
-        return null;
+        if (key == null || key.trim().equalsIgnoreCase("") || field == null
+                || field.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        HashIncrByEvent e = new HashIncrByEvent(key, field, v, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof HashListener) {
+                if (((HashListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
     /*
@@ -341,7 +582,19 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
     @Override
     public Double incrByFloat(String key, String field, double v)
             throws CacheCodeException {
-        return null;
+        if (key == null || key.trim().equalsIgnoreCase("") || field == null
+                || field.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        HashIncrByFloatEvent e = new HashIncrByFloatEvent(key, field, v, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof HashListener) {
+                if (((HashListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
     /*
@@ -353,7 +606,18 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
      */
     @Override
     public Long len(String key) throws CacheCodeException {
-        return null;
+        if (key == null || key.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        HashLenEvent e = new HashLenEvent(key, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof HashListener) {
+                if (((HashListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
     }
 
 }
