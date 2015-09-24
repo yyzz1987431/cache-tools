@@ -4,7 +4,6 @@
 package com.qbao.middleware.cache.utils;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.qbao.middleware.cache.core.support.redis.IHashCommand;
@@ -44,7 +43,11 @@ import com.qbao.middleware.cache.listerner.CacheListener;
 public class CacheRedisUtils implements IHashCommand, IKeyCommand,
         IStringCommand {
 
-    protected final Map<String, CacheListener> handles = new HashMap<String, CacheListener>();
+    protected final Map<String, CacheListener> handles;
+
+    public CacheRedisUtils(Map<String, CacheListener> handles) {
+        this.handles = handles;
+    }
 
     // protected final KeyCommandUtils keyUtils = new KeyCommandUtils();
     // protected final StringCommandUtils strUtils = new StringCommandUtils();
