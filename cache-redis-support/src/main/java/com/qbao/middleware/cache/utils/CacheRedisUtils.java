@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.qbao.middleware.cache.core.support.redis.IHashCommand;
 import com.qbao.middleware.cache.core.support.redis.IKeyCommand;
+import com.qbao.middleware.cache.core.support.redis.IListCommand;
 import com.qbao.middleware.cache.core.support.redis.IStringCommand;
 import com.qbao.middleware.cache.event.redis.hash.HashDelEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashExistsEvent;
@@ -41,7 +42,7 @@ import com.qbao.middleware.cache.listerner.CacheListener;
  * @version 1.0
  */
 public class CacheRedisUtils implements IHashCommand, IKeyCommand,
-        IStringCommand {
+        IStringCommand, IListCommand {
 
     protected final Map<String, CacheListener> handles;
 
@@ -621,6 +622,133 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
             }
         }
         return e.result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.core.support.redis.IListCommand#bLPop(java.
+     * lang.String, int)
+     */
+    @Override
+    public void bLPop(String key, int timeOut) throws CacheCodeException {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.core.support.redis.IListCommand#bLPop(java.
+     * lang.String[], int)
+     */
+    @Override
+    public void bLPop(String[] keys, int timeOut) throws CacheCodeException {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.core.support.redis.IListCommand#bRPop(java.
+     * lang.String, int)
+     */
+    @Override
+    public void bRPop(String key, int timeOut) throws CacheCodeException {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.core.support.redis.IListCommand#bRPop(java.
+     * lang.String[], int)
+     */
+    @Override
+    public void bRPop(String[] keys, int timeOut) throws CacheCodeException {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.core.support.redis.IListCommand#bRPopLpush()
+     */
+    @Override
+    public void bRPopLpush() throws CacheCodeException {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.qbao.middleware.cache.core.support.redis.IListCommand#lindex()
+     */
+    @Override
+    public void lindex() throws CacheCodeException {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.qbao.middleware.cache.core.support.redis.IListCommand#lLen()
+     */
+    @Override
+    public void lLen() throws CacheCodeException {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.qbao.middleware.cache.core.support.redis.IListCommand#lPop()
+     */
+    @Override
+    public void lPop() throws CacheCodeException {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.qbao.middleware.cache.core.support.redis.IListCommand#rPop()
+     */
+    @Override
+    public void rPop() throws CacheCodeException {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.qbao.middleware.cache.core.support.redis.IListCommand#lPush()
+     */
+    @Override
+    public void lPush() throws CacheCodeException {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.qbao.middleware.cache.core.support.redis.IListCommand#rPush()
+     */
+    @Override
+    public void rPush() throws CacheCodeException {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.qbao.middleware.cache.core.support.redis.IListCommand#lInsert()
+     */
+    @Override
+    public void lInsert() throws CacheCodeException {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.core.support.redis.IListCommand#rPopLPush()
+     */
+    @Override
+    public void rPopLPush() throws CacheCodeException {
     }
 
 }

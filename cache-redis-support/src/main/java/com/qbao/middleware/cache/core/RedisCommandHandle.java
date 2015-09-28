@@ -3,6 +3,8 @@
  */
 package com.qbao.middleware.cache.core;
 
+import java.util.List;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -21,6 +23,21 @@ import com.qbao.middleware.cache.event.redis.key.KeyExpirtEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyScanEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyTtlEvent;
 import com.qbao.middleware.cache.event.redis.key.KeyTypeEvent;
+import com.qbao.middleware.cache.event.redis.list.ListBlockLPopEvent;
+import com.qbao.middleware.cache.event.redis.list.ListBlockRPopEvent;
+import com.qbao.middleware.cache.event.redis.list.ListBlockRPopLPushEvent;
+import com.qbao.middleware.cache.event.redis.list.ListIndexEvent;
+import com.qbao.middleware.cache.event.redis.list.ListInsertEvent;
+import com.qbao.middleware.cache.event.redis.list.ListLenEvent;
+import com.qbao.middleware.cache.event.redis.list.ListPopEvent;
+import com.qbao.middleware.cache.event.redis.list.ListPushEvent;
+import com.qbao.middleware.cache.event.redis.list.ListRPopEvent;
+import com.qbao.middleware.cache.event.redis.list.ListRPopLPushEvent;
+import com.qbao.middleware.cache.event.redis.list.ListRPushEvent;
+import com.qbao.middleware.cache.event.redis.list.ListRangeEvent;
+import com.qbao.middleware.cache.event.redis.list.ListRemEvent;
+import com.qbao.middleware.cache.event.redis.list.ListSetEvent;
+import com.qbao.middleware.cache.event.redis.list.ListTrimEvent;
 import com.qbao.middleware.cache.event.redis.string.StringAppendEvent;
 import com.qbao.middleware.cache.event.redis.string.StringDecrEvent;
 import com.qbao.middleware.cache.event.redis.string.StringGetEvent;
@@ -28,6 +45,7 @@ import com.qbao.middleware.cache.event.redis.string.StringIncrEvent;
 import com.qbao.middleware.cache.event.redis.string.StringSetEvent;
 import com.qbao.middleware.cache.listener.HashListener;
 import com.qbao.middleware.cache.listener.KeyListener;
+import com.qbao.middleware.cache.listener.ListListener;
 import com.qbao.middleware.cache.listener.StringListener;
 
 /**
@@ -37,7 +55,7 @@ import com.qbao.middleware.cache.listener.StringListener;
  * @version 1.0
  */
 public class RedisCommandHandle implements StringListener, HashListener,
-        KeyListener {
+        KeyListener, ListListener {
 
     protected JedisPool redisPool;
 
@@ -581,5 +599,201 @@ public class RedisCommandHandle implements StringListener, HashListener,
         // }
 
         return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListBlockLPopEvent)
+     */
+    @Override
+    public boolean handleEvent(ListBlockLPopEvent e) {
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            List<String> v = client.brpop(e.keys);
+            if (v == null)
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListBlockRPopEvent)
+     */
+    @Override
+    public boolean handleEvent(ListBlockRPopEvent e) {
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListBlockRPopLPushEvent)
+     */
+    @Override
+    public boolean handleEvent(ListBlockRPopLPushEvent e) {
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListIndexEvent)
+     */
+    @Override
+    public boolean handleEvent(ListIndexEvent e) {
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListInsertEvent)
+     */
+    @Override
+    public boolean handleEvent(ListInsertEvent e) {
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListLenEvent)
+     */
+    @Override
+    public boolean handleEvent(ListLenEvent e) {
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListPopEvent)
+     */
+    @Override
+    public boolean handleEvent(ListPopEvent e) {
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListPushEvent)
+     */
+    @Override
+    public boolean handleEvent(ListPushEvent e) {
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListRangeEvent)
+     */
+    @Override
+    public boolean handleEvent(ListRangeEvent e) {
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListRemEvent)
+     */
+    @Override
+    public boolean handleEvent(ListRemEvent e) {
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListRPopEvent)
+     */
+    @Override
+    public boolean handleEvent(ListRPopEvent e) {
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListRPopLPushEvent)
+     */
+    @Override
+    public boolean handleEvent(ListRPopLPushEvent e) {
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListRPushEvent)
+     */
+    @Override
+    public boolean handleEvent(ListRPushEvent e) {
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListSetEvent)
+     */
+    @Override
+    public boolean handleEvent(ListSetEvent e) {
+        return false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListTrimEvent)
+     */
+    @Override
+    public boolean handleEvent(ListTrimEvent e) {
+        return false;
     }
 }
