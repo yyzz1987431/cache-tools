@@ -638,7 +638,23 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListBlockRPopEvent e) {
-        return false;
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            List<String> v = client.brpop(e.keys);
+            if (v == null)
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
     }
 
     /*
@@ -650,7 +666,24 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListBlockRPopLPushEvent e) {
-        return false;
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            String v = client.brpoplpush(e.sourceKey, e.destinationKey,
+                    e.timeout);
+            if (v == null || v.trim().equals(""))
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
     }
 
     /*
@@ -662,7 +695,23 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListIndexEvent e) {
-        return false;
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            String v = client.lindex(e.key, e.index);
+            if (v == null || v.trim().equals(""))
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
     }
 
     /*
@@ -674,7 +723,23 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListInsertEvent e) {
-        return false;
+        // Jedis client = this.getClient();
+        // if (client == null) {
+        // return false;
+        // }
+        //
+        // try {
+        // String v = client.linsert(key, where, pivot, value)
+        // if (v == null || v.trim().equals(""))
+        // return false;
+        // e.result = v;
+        // } finally {
+        // if (client != null && client.isConnected()) {
+        // client.close();
+        // }
+        // }
+
+        return true;
     }
 
     /*
@@ -686,7 +751,23 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListLenEvent e) {
-        return false;
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            Long v = client.llen(e.key);
+            if (v == null)
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
     }
 
     /*
@@ -698,7 +779,23 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListPopEvent e) {
-        return false;
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            String v = client.lpop(e.key);
+            if (v == null)
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
     }
 
     /*
@@ -710,7 +807,23 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListPushEvent e) {
-        return false;
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            Long v = client.lpush(e.key, e.values);
+            if (v == null)
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
     }
 
     /*
@@ -722,7 +835,23 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListRangeEvent e) {
-        return false;
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            List<String> v = client.lrange(e.key, e.start, e.end);
+            if (v == null)
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
     }
 
     /*
@@ -734,7 +863,23 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListRemEvent e) {
-        return false;
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            Long v = client.lrem(e.key, e.count, e.value);
+            if (v == null)
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
     }
 
     /*
@@ -746,7 +891,23 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListRPopEvent e) {
-        return false;
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            String v = client.rpop(e.key);
+            if (v == null)
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
     }
 
     /*
@@ -758,7 +919,23 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListRPopLPushEvent e) {
-        return false;
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            String v = client.rpoplpush(e.srckey, e.dstkey);
+            if (v == null)
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
     }
 
     /*
@@ -770,7 +947,23 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListRPushEvent e) {
-        return false;
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            Long v = client.rpush(e.key, e.values);
+            if (v == null)
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
     }
 
     /*
@@ -782,7 +975,23 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListSetEvent e) {
-        return false;
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            String v = client.lset(e.key, e.index, e.value);
+            if (v == null)
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
     }
 
     /*
@@ -794,6 +1003,22 @@ public class RedisCommandHandle implements StringListener, HashListener,
      */
     @Override
     public boolean handleEvent(ListTrimEvent e) {
-        return false;
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            String v = client.ltrim(e.key, e.start, e.end);
+            if (v == null)
+                return false;
+            e.result = v;
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return true;
     }
 }

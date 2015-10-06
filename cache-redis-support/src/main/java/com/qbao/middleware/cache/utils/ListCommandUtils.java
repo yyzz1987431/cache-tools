@@ -4,11 +4,20 @@
 package com.qbao.middleware.cache.utils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.qbao.middleware.cache.core.support.redis.IListCommand;
 import com.qbao.middleware.cache.event.redis.list.ListBlockLPopEvent;
 import com.qbao.middleware.cache.event.redis.list.ListBlockRPopEvent;
+import com.qbao.middleware.cache.event.redis.list.ListBlockRPopLPushEvent;
+import com.qbao.middleware.cache.event.redis.list.ListIndexEvent;
+import com.qbao.middleware.cache.event.redis.list.ListLenEvent;
+import com.qbao.middleware.cache.event.redis.list.ListPopEvent;
+import com.qbao.middleware.cache.event.redis.list.ListPushEvent;
+import com.qbao.middleware.cache.event.redis.list.ListRPopEvent;
+import com.qbao.middleware.cache.event.redis.list.ListRPopLPushEvent;
+import com.qbao.middleware.cache.event.redis.list.ListRPushEvent;
 import com.qbao.middleware.cache.exception.CacheCodeException;
 import com.qbao.middleware.cache.exception.CacheExceptionEnum;
 import com.qbao.middleware.cache.listener.ListListener;
@@ -54,7 +63,8 @@ public class ListCommandUtils implements IListCommand {
      * lang.String, int)
      */
     @Override
-    public void bLPop(String key, int timeOut) throws CacheCodeException {
+    public List<String> bLPop(String key, int timeOut)
+            throws CacheCodeException {
         if (key == null || key.trim().equalsIgnoreCase("")) {
             throw new CacheCodeException(CacheExceptionEnum.参数异常);
         }
@@ -64,6 +74,7 @@ public class ListCommandUtils implements IListCommand {
             if (l.handleEvent(e))
                 break;
         }
+        return e.result;
     }
 
     /*
@@ -74,7 +85,8 @@ public class ListCommandUtils implements IListCommand {
      * lang.String[], int)
      */
     @Override
-    public void bLPop(String[] keys, int timeOut) throws CacheCodeException {
+    public List<String> bLPop(String[] keys, int timeOut)
+            throws CacheCodeException {
         if (keys == null || keys.length == 0) {
             throw new CacheCodeException(CacheExceptionEnum.参数异常);
         }
@@ -84,6 +96,7 @@ public class ListCommandUtils implements IListCommand {
             if (l.handleEvent(e))
                 break;
         }
+        return e.result;
     }
 
     /*
@@ -94,7 +107,8 @@ public class ListCommandUtils implements IListCommand {
      * lang.String, int)
      */
     @Override
-    public void bRPop(String key, int timeOut) throws CacheCodeException {
+    public List<String> bRPop(String key, int timeOut)
+            throws CacheCodeException {
         if (key == null || key.trim().equalsIgnoreCase("")) {
             throw new CacheCodeException(CacheExceptionEnum.参数异常);
         }
@@ -104,6 +118,7 @@ public class ListCommandUtils implements IListCommand {
             if (l.handleEvent(e))
                 break;
         }
+        return e.result;
     }
 
     /*
@@ -114,7 +129,8 @@ public class ListCommandUtils implements IListCommand {
      * lang.String[], int)
      */
     @Override
-    public void bRPop(String[] keys, int timeOut) throws CacheCodeException {
+    public List<String> bRPop(String[] keys, int timeOut)
+            throws CacheCodeException {
         if (keys == null || keys.length == 0) {
             throw new CacheCodeException(CacheExceptionEnum.参数异常);
         }
@@ -124,6 +140,7 @@ public class ListCommandUtils implements IListCommand {
             if (l.handleEvent(e))
                 break;
         }
+        return e.result;
     }
 
     /*
@@ -133,7 +150,21 @@ public class ListCommandUtils implements IListCommand {
      * com.qbao.middleware.cache.core.support.redis.IListCommand#bRPopLpush()
      */
     @Override
-    public void bRPopLpush() throws CacheCodeException {
+    public String bRPopLpush(String key, String srcKey, String destKey,
+            int timeout) throws CacheCodeException {
+        if (key == null || key.trim().equals("") || srcKey == null
+                || srcKey.trim().equals("") || destKey == null
+                || destKey.trim().equals("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        ListBlockRPopLPushEvent e = new ListBlockRPopLPushEvent(key, srcKey,
+                destKey, timeout, this);
+        for (ListListener l : handles.values()) {
+            if (l.handleEvent(e))
+                break;
+        }
+        return e.result;
     }
 
     /*
@@ -142,7 +173,17 @@ public class ListCommandUtils implements IListCommand {
      * @see com.qbao.middleware.cache.core.support.redis.IListCommand#lindex()
      */
     @Override
-    public void lindex() throws CacheCodeException {
+    public String lindex(String key, long index) throws CacheCodeException {
+        if (key == null || key.trim().equals("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        ListIndexEvent e = new ListIndexEvent(key, index, this);
+        for (ListListener l : handles.values()) {
+            if (l.handleEvent(e))
+                break;
+        }
+        return e.result;
     }
 
     /*
@@ -151,7 +192,17 @@ public class ListCommandUtils implements IListCommand {
      * @see com.qbao.middleware.cache.core.support.redis.IListCommand#lLen()
      */
     @Override
-    public void lLen() throws CacheCodeException {
+    public Long lLen(String key) throws CacheCodeException {
+        if (key == null || key.trim().equals("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        ListLenEvent e = new ListLenEvent(key, this);
+        for (ListListener l : handles.values()) {
+            if (l.handleEvent(e))
+                break;
+        }
+        return e.result;
     }
 
     /*
@@ -160,7 +211,17 @@ public class ListCommandUtils implements IListCommand {
      * @see com.qbao.middleware.cache.core.support.redis.IListCommand#lPop()
      */
     @Override
-    public void lPop() throws CacheCodeException {
+    public String lPop(String key) throws CacheCodeException {
+        if (key == null || key.trim().equals("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        ListPopEvent e = new ListPopEvent(key, this);
+        for (ListListener l : handles.values()) {
+            if (l.handleEvent(e))
+                break;
+        }
+        return e.result;
     }
 
     /*
@@ -169,7 +230,17 @@ public class ListCommandUtils implements IListCommand {
      * @see com.qbao.middleware.cache.core.support.redis.IListCommand#rPop()
      */
     @Override
-    public void rPop() throws CacheCodeException {
+    public String rPop(String key) throws CacheCodeException {
+        if (key == null || key.trim().equals("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        ListRPopEvent e = new ListRPopEvent(key, this);
+        for (ListListener l : handles.values()) {
+            if (l.handleEvent(e))
+                break;
+        }
+        return e.result;
     }
 
     /*
@@ -178,7 +249,18 @@ public class ListCommandUtils implements IListCommand {
      * @see com.qbao.middleware.cache.core.support.redis.IListCommand#lPush()
      */
     @Override
-    public void lPush() throws CacheCodeException {
+    public Long lPush(String key, String... values) throws CacheCodeException {
+        if (key == null || key.trim().equals("") || values == null
+                || values.length > 0) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        ListPushEvent e = new ListPushEvent(key, values, this);
+        for (ListListener l : handles.values()) {
+            if (l.handleEvent(e))
+                break;
+        }
+        return e.result;
     }
 
     /*
@@ -187,7 +269,18 @@ public class ListCommandUtils implements IListCommand {
      * @see com.qbao.middleware.cache.core.support.redis.IListCommand#rPush()
      */
     @Override
-    public void rPush() throws CacheCodeException {
+    public Long rPush(String key, String... values) throws CacheCodeException {
+        if (key == null || key.trim().equals("") || values == null
+                || values.length > 0) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        ListRPushEvent e = new ListRPushEvent(key, values, this);
+        for (ListListener l : handles.values()) {
+            if (l.handleEvent(e))
+                break;
+        }
+        return e.result;
     }
 
     /*
@@ -197,6 +290,7 @@ public class ListCommandUtils implements IListCommand {
      */
     @Override
     public void lInsert() throws CacheCodeException {
+        throw new CacheCodeException(CacheExceptionEnum.不支持的操作类型);
     }
 
     /*
@@ -206,7 +300,21 @@ public class ListCommandUtils implements IListCommand {
      * com.qbao.middleware.cache.core.support.redis.IListCommand#rPopLPush()
      */
     @Override
-    public void rPopLPush() throws CacheCodeException {
+    public String rPopLPush(String key, String srcKey, String destKey)
+            throws CacheCodeException {
+        if (key == null || srcKey.trim().equals("") || srcKey == null
+                || srcKey.trim().equals("") || destKey == null
+                || destKey.trim().equals("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        ListRPopLPushEvent e = new ListRPopLPushEvent(key, srcKey, destKey,
+                this);
+        for (ListListener l : handles.values()) {
+            if (l.handleEvent(e))
+                break;
+        }
+        return e.result;
     }
 
 }

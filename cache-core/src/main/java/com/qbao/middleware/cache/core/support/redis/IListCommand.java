@@ -3,6 +3,8 @@
  */
 package com.qbao.middleware.cache.core.support.redis;
 
+import java.util.List;
+
 import com.qbao.middleware.cache.core.ICacheCommand;
 import com.qbao.middleware.cache.exception.CacheCodeException;
 
@@ -24,29 +26,31 @@ public interface IListCommand extends ICacheCommand {
     // LTRIM
     // RPUSHX
 
-    void bLPop(String key, int timeOut) throws CacheCodeException;
+    List<String> bLPop(String key, int timeOut) throws CacheCodeException;
 
-    void bLPop(String[] keys, int timeOut) throws CacheCodeException;
+    List<String> bLPop(String[] keys, int timeOut) throws CacheCodeException;
 
-    void bRPop(String key, int timeOut) throws CacheCodeException;
+    List<String> bRPop(String key, int timeOut) throws CacheCodeException;
 
-    void bRPop(String[] keys, int timeOut) throws CacheCodeException;
+    List<String> bRPop(String[] keys, int timeOut) throws CacheCodeException;
 
-    void bRPopLpush() throws CacheCodeException;
+    String bRPopLpush(String key, String srcKey, String destKey, int timeout)
+            throws CacheCodeException;
 
-    void lindex() throws CacheCodeException;
+    String lindex(String key, long index) throws CacheCodeException;
 
-    void lLen() throws CacheCodeException;
+    Long lLen(String key) throws CacheCodeException;
 
-    void lPop() throws CacheCodeException;
+    String lPop(String key) throws CacheCodeException;
 
-    void rPop() throws CacheCodeException;
+    String rPop(String key) throws CacheCodeException;
 
-    void lPush() throws CacheCodeException;
+    Long lPush(String key, String... values) throws CacheCodeException;
 
-    void rPush() throws CacheCodeException;
+    Long rPush(String key, String... values) throws CacheCodeException;
 
     void lInsert() throws CacheCodeException;
 
-    void rPopLPush() throws CacheCodeException;
+    String rPopLPush(String key, String srcKey, String destKey)
+            throws CacheCodeException;
 }

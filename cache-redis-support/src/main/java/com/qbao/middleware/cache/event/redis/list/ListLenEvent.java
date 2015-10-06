@@ -13,6 +13,7 @@ import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
  */
 public class ListLenEvent extends RedisBaseEvent {
 
+    public Long result;
     /**
      * @param key
      * @param source

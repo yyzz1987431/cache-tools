@@ -12,13 +12,17 @@ import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
  * @version 1.0
  */
 public class ListTrimEvent extends RedisBaseEvent {
+    public final long start, end;
+    public String result;
 
     /**
      * @param key
      * @param source
      */
-    public ListTrimEvent(String key, Object source) {
+    public ListTrimEvent(String key, long start, long end, Object source) {
         super(key, source);
+        this.start = start;
+        this.end = end;
     }
 
 }

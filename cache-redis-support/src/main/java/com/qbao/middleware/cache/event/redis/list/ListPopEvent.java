@@ -12,6 +12,7 @@ import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
  * @version 1.0
  */
 public class ListPopEvent extends RedisBaseEvent {
+    public String result;
 
     /**
      * @param key

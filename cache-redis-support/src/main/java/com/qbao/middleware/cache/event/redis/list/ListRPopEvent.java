@@ -13,6 +13,7 @@ import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
  */
 public class ListRPopEvent extends RedisBaseEvent {
 
+    public String result;
     /**
      * @param key
      * @param source

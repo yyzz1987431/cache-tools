@@ -13,12 +13,15 @@ import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
  */
 public class ListRPushEvent extends RedisBaseEvent {
 
+    public final String[] values;
+    public Long result;
     /**
      * @param key
      * @param source
      */
-    public ListRPushEvent(String key, Object source) {
+    public ListRPushEvent(String key,String[] v, Object source) {
         super(key, source);
+        this.values = v;
     }
 
 }

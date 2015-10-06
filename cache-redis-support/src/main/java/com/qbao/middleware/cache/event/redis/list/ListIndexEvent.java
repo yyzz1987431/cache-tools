@@ -13,12 +13,15 @@ import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
  */
 public class ListIndexEvent extends RedisBaseEvent {
 
+    public final long index;
+    public String result;
     /**
      * @param key
      * @param source
      */
-    public ListIndexEvent(String key, Object source) {
+    public ListIndexEvent(String key, long idx,Object source) {
         super(key, source);
+        this.index = idx;
     }
 
 }
