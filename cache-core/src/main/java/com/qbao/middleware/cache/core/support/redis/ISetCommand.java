@@ -13,46 +13,51 @@ import com.qbao.middleware.cache.exception.CacheCodeException;
  * @version 1.0
  */
 public interface ISetCommand extends ICacheCommand {
-//    SortedSet（有序集合）
-//    ZADD
-//    ZCARD
-//    ZCOUNT
-//    ZINCRBY
-//    ZRANGE
-//    ZRANGEBYSCORE
-//    ZRANK
-//    ZREM
-//    ZREMRANGEBYRANK
-//    ZREMRANGEBYSCORE
-//    ZREVRANGE
-//    ZREVRANGEBYSCORE
-//    ZREVRANK
-//    ZSCORE
-//    ZUNIONSTORE
-//    ZINTERSTORE
-//    ZSCAN
-//    ZRANGEBYLEX
-//    ZLEXCOUNT
-//    ZREMRANGEBYLEX
-    
-    public void zAdd()throws CacheCodeException;
-    public void zCard()throws CacheCodeException;
-    public void zCount()throws CacheCodeException;
-    public void zIncrBy()throws CacheCodeException;
-    public void zRange()throws CacheCodeException;
-    public void zRangeByScore()throws CacheCodeException;
-    public void zRank()throws CacheCodeException;
-    public void zRem()throws CacheCodeException;
-    public void zRemRangeByRank()throws CacheCodeException;
-    public void zRemRangeByScore()throws CacheCodeException;
-    public void zRevRange()throws CacheCodeException;
-    public void zRevRangeByScore()throws CacheCodeException;
-    public void zRevRank()throws CacheCodeException;
-    public void zScore()throws CacheCodeException;
-    public void zUnionStore()throws CacheCodeException;
-    public void zInterStore()throws CacheCodeException;
-    public void zScan()throws CacheCodeException;
-    public void zRangeByLex()throws CacheCodeException;
-    public void zLexCount()throws CacheCodeException;
-    public void zRemRangeByLex()throws CacheCodeException;
+    // Set（集合）
+    // SADD
+    // SCARD
+    // SDIFF
+    // SDIFFSTORE
+    // SINTER
+    // SINTERSTORE
+    // SISMEMBER
+    // SMEMBERS
+    // SMOVE
+    // SPOP
+    // SRANDMEMBER
+    // SREM
+    // SUNION
+    // SUNIONSTORE
+    // SSCAN
+
+    public void sAdd() throws CacheCodeException;
+
+    public void sCard() throws CacheCodeException;
+
+    public void sDiff() throws CacheCodeException;
+
+    public void sDiffStore() throws CacheCodeException;
+
+    public void sInter() throws CacheCodeException;
+
+    public void sInterStore() throws CacheCodeException;
+
+    public void sIsMember() throws CacheCodeException;
+
+    public void sMembers() throws CacheCodeException;
+
+    public void sMove() throws CacheCodeException;
+
+    public void sPop() throws CacheCodeException;
+
+    public void sRandMember() throws CacheCodeException;
+
+    public void sRem() throws CacheCodeException;
+
+    public void sUnion() throws CacheCodeException;
+
+    public void sUnionStore() throws CacheCodeException;
+
+    public void sScan() throws CacheCodeException;
+
 }
