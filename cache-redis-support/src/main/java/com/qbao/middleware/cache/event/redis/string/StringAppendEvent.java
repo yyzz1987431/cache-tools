@@ -4,6 +4,8 @@
 package com.qbao.middleware.cache.event.redis.string;
 
 import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
+import com.qbao.middleware.cache.listener.StringListener;
+import com.qbao.middleware.cache.listerner.CacheListener;
 
 /**
  * @author Yate
@@ -23,4 +25,12 @@ public class StringAppendEvent extends RedisBaseEvent {
         this.appendValue = appendValue;
     }
 
+    public void handle(CacheListener... ls) {
+        for (CacheListener l : ls) {
+            if (l instanceof StringListener) {
+                if (((StringListener) l).handleEvent(this))
+                    break;
+            }
+        }
+    }
 }

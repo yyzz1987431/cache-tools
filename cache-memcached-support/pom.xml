@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.qbao.middleware</groupId>
 		<artifactId>cache-tools</artifactId>
-		<version>0.1.0</version>
+		<version>0.1.4</version>
 	</parent>
 	<artifactId>cache-memcached-support</artifactId>
 	<name>cache-memcached-support</name>

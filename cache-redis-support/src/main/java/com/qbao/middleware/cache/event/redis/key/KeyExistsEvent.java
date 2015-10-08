@@ -4,6 +4,8 @@
 package com.qbao.middleware.cache.event.redis.key;
 
 import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
+import com.qbao.middleware.cache.listener.KeyListener;
+import com.qbao.middleware.cache.listerner.CacheListener;
 
 /**
  * @author Yate
@@ -14,12 +16,22 @@ import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
 public class KeyExistsEvent extends RedisBaseEvent {
 
     public Boolean result;
+
     /**
      * @param key
      * @param source
      */
     public KeyExistsEvent(String key, Object source) {
         super(key, source);
+    }
+
+    public void handle(CacheListener... ls) {
+        for (CacheListener l : ls) {
+            if (l instanceof KeyListener) {
+                if (((KeyListener) l).handleEvent(this))
+                    break;
+            }
+        }
     }
 
 }

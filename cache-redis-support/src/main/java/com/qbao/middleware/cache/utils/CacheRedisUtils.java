@@ -13,6 +13,7 @@ import com.qbao.middleware.cache.core.support.redis.IListCommand;
 import com.qbao.middleware.cache.core.support.redis.IStringCommand;
 import com.qbao.middleware.cache.event.redis.hash.HashDelEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashExistsEvent;
+import com.qbao.middleware.cache.event.redis.hash.HashGetALLEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashGetEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashIncrByEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashIncrByFloatEvent;
@@ -46,6 +47,7 @@ import com.qbao.middleware.cache.listener.KeyListener;
 import com.qbao.middleware.cache.listener.ListListener;
 import com.qbao.middleware.cache.listener.StringListener;
 import com.qbao.middleware.cache.listerner.CacheListener;
+import com.qbao.middleware.cache.strategy.IConditionStrategy;
 
 /**
  * @author Yate
@@ -58,13 +60,15 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
 
     protected final Map<String, CacheListener> handles;
 
+    protected ThreadLocal<IConditionStrategy> currentStrategy = new ThreadLocal<IConditionStrategy>();
+
     public CacheRedisUtils(Map<String, CacheListener> handles) {
         this.handles = handles;
     }
 
-    // protected final KeyCommandUtils keyUtils = new KeyCommandUtils();
-    // protected final StringCommandUtils strUtils = new StringCommandUtils();
-    // protected final HashCommandUtils hashUtils = new HashCommandUtils();
+    public void setCurrentStrategy(IConditionStrategy currentStrategy) {
+        this.currentStrategy.set(currentStrategy);
+    }
 
     public void registerListener(String key, CacheListener l)
             throws CacheCodeException {
@@ -78,92 +82,22 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
                 }
             }
         }
-
-        // if (l instanceof KeyListener) {
-        // keyUtils.registerListener(key, (KeyListener) l);
-        // }
-        // if (l instanceof StringListener) {
-        // strUtils.registerListener(key, (StringListener) l);
-        // }
-        // if (l instanceof HashListener) {
-        // hashUtils.registerListener(key, (HashListener) l);
-        // }
     }
-
-    // public void registerKeyListener(String key, KeyListener l)
-    // throws CacheCodeException {
-    // if (key == null || l == null || key.trim().equals(""))
-    // throw new CacheCodeException(CacheExceptionEnum.参数异常);
-    // keyUtils.registerListener(key, l);
-    // }
-    //
-    // public void registerStringListener(String key, StringListener l)
-    // throws CacheCodeException {
-    // if (key == null || l == null || key.trim().equals(""))
-    // throw new CacheCodeException(CacheExceptionEnum.参数异常);
-    // strUtils.registerListener(key, l);
-    // }
-    //
-    // public void registerHashListener(String key, HashListener l)
-    // throws CacheCodeException {
-    // if (key == null || l == null || key.trim().equals(""))
-    // throw new CacheCodeException(CacheExceptionEnum.参数异常);
-    // hashUtils.registerListener(key, l);
-    // }
 
     public void unregisterListener(String key) throws CacheCodeException {
         if (key == null || key.trim().equals(""))
             throw new CacheCodeException(CacheExceptionEnum.参数异常);
-        // keyUtils.unregisterListener(key);
-        // strUtils.unregisterListener(key);
-        // hashUtils.unregisterListener(key);
 
         if (handles.containsKey(key)) {
             handles.remove(key);
         }
     }
 
-    // public void unregisterKeyListener(String key) throws CacheCodeException {
-    // if (key == null || key.trim().equals(""))
-    // throw new CacheCodeException(CacheExceptionEnum.参数异常);
-    // keyUtils.unregisterListener(key);
-    // }
-    //
-    // public void unregisterStringListener(String key) throws
-    // CacheCodeException {
-    // if (key == null || key.trim().equals(""))
-    // throw new CacheCodeException(CacheExceptionEnum.参数异常);
-    // strUtils.unregisterListener(key);
-    // }
-    //
-    // public void unregisterHashListener(String key) throws CacheCodeException
-    // {
-    // if (key == null || key.trim().equals(""))
-    // throw new CacheCodeException(CacheExceptionEnum.参数异常);
-    // hashUtils.unregisterListener(key);
-    // }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.qbao.middleware.cache.core.support.redis.IStringCommand#set(java.
-     * lang.String, java.io.Serializable)
-     */
-    @Override
     public <T extends Serializable> void set(String key, T data)
             throws CacheCodeException {
         this.set(key, data, null);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * com.qbao.middleware.cache.core.support.redis.IStringCommand#set(java.
-     * lang.String, java.io.Serializable, java.lang.Integer)
-     */
-    @Override
     public <T extends Serializable> void set(String key, T data, Integer time)
             throws CacheCodeException {
         if (key == null || data == null || key.trim().equalsIgnoreCase("")) {
@@ -195,6 +129,7 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
         }
 
         StringGetEvent<T> e = new StringGetEvent<T>(key, clazz, this);
+
         for (CacheListener l : handles.values()) {
             if (l instanceof StringListener) {
                 if (((StringListener) l).handleEvent(e))
@@ -627,6 +562,21 @@ public class CacheRedisUtils implements IHashCommand, IKeyCommand,
         }
 
         HashLenEvent e = new HashLenEvent(key, this);
+        for (CacheListener l : handles.values()) {
+            if (l instanceof HashListener) {
+                if (((HashListener) l).handleEvent(e))
+                    break;
+            }
+        }
+        return e.result;
+    }
+
+    public Map<String, Object> hgetall(String key, Class<?> objClass) {
+        if (key == null || key.trim().equalsIgnoreCase("")) {
+            throw new CacheCodeException(CacheExceptionEnum.参数异常);
+        }
+
+        HashGetALLEvent e = new HashGetALLEvent(key, this, objClass);
         for (CacheListener l : handles.values()) {
             if (l instanceof HashListener) {
                 if (((HashListener) l).handleEvent(e))

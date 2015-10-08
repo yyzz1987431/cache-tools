@@ -4,6 +4,8 @@
 package com.qbao.middleware.cache.event.redis.set;
 
 import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
+import com.qbao.middleware.cache.listener.SetListener;
+import com.qbao.middleware.cache.listerner.CacheListener;
 
 /**
  * @author Yate
@@ -21,4 +23,12 @@ public class SetCardEvent extends RedisBaseEvent {
         super(key, source);
     }
 
+    public void handle(CacheListener... ls) {
+        for (CacheListener l : ls) {
+            if (l instanceof SetListener) {
+                if (((SetListener) l).handleEvent(this))
+                    break;
+            }
+        }
+    }
 }

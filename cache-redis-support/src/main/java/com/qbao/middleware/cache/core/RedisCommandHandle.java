@@ -4,6 +4,7 @@
 package com.qbao.middleware.cache.core;
 
 import java.util.List;
+import java.util.Map;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -11,6 +12,7 @@ import redis.clients.jedis.JedisPool;
 import com.alibaba.fastjson.JSON;
 import com.qbao.middleware.cache.event.redis.hash.HashDelEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashExistsEvent;
+import com.qbao.middleware.cache.event.redis.hash.HashGetALLEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashGetEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashIncrByEvent;
 import com.qbao.middleware.cache.event.redis.hash.HashIncrByFloatEvent;
@@ -449,8 +451,10 @@ public class RedisCommandHandle implements StringListener, HashListener,
 
         try {
             Boolean v = client.exists(e.key);
-            if (v == null || !v.booleanValue())
-                return false;
+            if (v == null || !v.booleanValue()) {
+                e.result = false;
+                return e.result;
+            }
             e.result = v;
         } finally {
             if (client != null && client.isConnected()) {
@@ -1020,5 +1024,39 @@ public class RedisCommandHandle implements StringListener, HashListener,
         }
 
         return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.qbao.middleware.cache.listener.ListListener#handleEvent(com.qbao.
+     * middleware.cache.event.redis.list.ListGetALLEvent)
+     */
+    @Override
+    public boolean handleEvent(HashGetALLEvent e) {
+        Jedis client = this.getClient();
+        if (client == null) {
+            return false;
+        }
+
+        try {
+            Map<String, String> hash = client.hgetAll(e.key);
+            if (hash != null && !hash.isEmpty()) {
+                Object o = null;
+                for (Map.Entry<String, String> he : hash.entrySet()) {
+                    o = JSON.parseObject(he.getValue(), e.clazz);
+                    if (o != null)
+                        e.result.put(he.getKey(), o);
+                }
+                return true;
+            }
+        } finally {
+            if (client != null && client.isConnected()) {
+                client.close();
+            }
+        }
+
+        return false;
     }
 }

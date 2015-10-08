@@ -4,6 +4,8 @@
 package com.qbao.middleware.cache.event.redis.key;
 
 import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
+import com.qbao.middleware.cache.listener.KeyListener;
+import com.qbao.middleware.cache.listerner.CacheListener;
 
 /**
  * @author Yate
@@ -15,14 +17,22 @@ public class KeyExpireAtEvent extends RedisBaseEvent {
 
     public final long unixTime;
     public Long result;
-    
+
     /**
      * @param key
      * @param source
      */
-    public KeyExpireAtEvent(String key,long unixTime, Object source) {
+    public KeyExpireAtEvent(String key, long unixTime, Object source) {
         super(key, source);
         this.unixTime = unixTime;
     }
 
+    public void handle(CacheListener... ls) {
+        for (CacheListener l : ls) {
+            if (l instanceof KeyListener) {
+                if (((KeyListener) l).handleEvent(this))
+                    break;
+            }
+        }
+    }
 }

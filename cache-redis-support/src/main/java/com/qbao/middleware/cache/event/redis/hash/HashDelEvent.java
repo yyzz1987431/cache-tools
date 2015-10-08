@@ -4,6 +4,8 @@
 package com.qbao.middleware.cache.event.redis.hash;
 
 import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
+import com.qbao.middleware.cache.listener.HashListener;
+import com.qbao.middleware.cache.listerner.CacheListener;
 
 /**
  * @author Yate
@@ -22,6 +24,15 @@ public class HashDelEvent extends RedisBaseEvent {
     public HashDelEvent(String key, String field, Object source) {
         super(key, source);
         this.field = field;
+    }
+
+    public void handle(CacheListener... ls) {
+        for (CacheListener l : ls) {
+            if (l instanceof HashListener) {
+                if (((HashListener) l).handleEvent(this))
+                    break;
+            }
+        }
     }
 
 }

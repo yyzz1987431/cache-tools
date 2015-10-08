@@ -4,6 +4,8 @@
 package com.qbao.middleware.cache.event.redis.list;
 
 import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
+import com.qbao.middleware.cache.listener.ListListener;
+import com.qbao.middleware.cache.listerner.CacheListener;
 
 /**
  * @author Yate
@@ -14,6 +16,7 @@ import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
 public class ListRPopEvent extends RedisBaseEvent {
 
     public String result;
+
     /**
      * @param key
      * @param source
@@ -22,4 +25,12 @@ public class ListRPopEvent extends RedisBaseEvent {
         super(key, source);
     }
 
+    public void handle(CacheListener... ls) {
+        for (CacheListener l : ls) {
+            if (l instanceof ListListener) {
+                if (((ListListener) l).handleEvent(this))
+                    break;
+            }
+        }
+    }
 }

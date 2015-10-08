@@ -1,7 +1,10 @@
 /**
- * HashExistsEvent.java
+ * ListGetALLEvent.java
  */
 package com.qbao.middleware.cache.event.redis.hash;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
 import com.qbao.middleware.cache.listener.HashListener;
@@ -9,26 +12,30 @@ import com.qbao.middleware.cache.listerner.CacheListener;
 
 /**
  * @author Yate
- * @date Sep 23, 2015
+ * @date Mar 31, 2016
  * @description TODO
  * @version 1.0
  */
-public class HashExistsEvent extends RedisBaseEvent {
+public class HashGetALLEvent extends RedisBaseEvent {
 
-    public final String field;
-    public Boolean result;
+    public Map<String, Object> result = new HashMap<String, Object>();
+    public final Class<?> clazz;
 
     /**
+     * @param key
      * @param source
      */
-    public HashExistsEvent(String key, String field, Object source) {
+    public HashGetALLEvent(String key, Object source, Class<?> valClass) {
         super(key, source);
-        this.field = field;
+        this.clazz = valClass;
     }
 
-    /* 
+    /*
      * (non-Javadoc)
-     * @see com.qbao.middleware.cache.event.redis.RedisBaseEvent#handle(com.qbao.middleware.cache.listerner.CacheListener[])
+     * 
+     * @see
+     * com.qbao.middleware.cache.event.redis.RedisBaseEvent#handle(com.qbao.
+     * middleware.cache.listerner.CacheListener[])
      */
     @Override
     public void handle(CacheListener... ls) {

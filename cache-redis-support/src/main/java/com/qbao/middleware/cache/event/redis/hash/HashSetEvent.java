@@ -4,6 +4,8 @@
 package com.qbao.middleware.cache.event.redis.hash;
 
 import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
+import com.qbao.middleware.cache.listener.HashListener;
+import com.qbao.middleware.cache.listerner.CacheListener;
 
 /**
  * @author Yate
@@ -26,4 +28,12 @@ public class HashSetEvent extends RedisBaseEvent {
         this.data = d;
     }
 
+    public void handle(CacheListener... ls) {
+        for (CacheListener l : ls) {
+            if (l instanceof HashListener) {
+                if (((HashListener) l).handleEvent(this))
+                    break;
+            }
+        }
+    }
 }

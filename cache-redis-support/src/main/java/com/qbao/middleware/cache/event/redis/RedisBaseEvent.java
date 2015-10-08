@@ -5,6 +5,8 @@ package com.qbao.middleware.cache.event.redis;
 
 import java.util.EventObject;
 
+import com.qbao.middleware.cache.listerner.CacheListener;
+
 /**
  * @author Yate
  * @date Sep 23, 2015
@@ -22,5 +24,7 @@ public abstract class RedisBaseEvent extends EventObject {
         super(source);
         this.key = key;
     }
+
+    public abstract void handle(CacheListener... ls);
 
 }

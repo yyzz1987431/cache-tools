@@ -6,6 +6,8 @@ package com.qbao.middleware.cache.event.redis.list;
 import java.util.List;
 
 import com.qbao.middleware.cache.event.redis.RedisBaseEvent;
+import com.qbao.middleware.cache.listener.ListListener;
+import com.qbao.middleware.cache.listerner.CacheListener;
 
 /**
  * @author Yate
@@ -29,4 +31,12 @@ public class ListBlockRPopEvent extends RedisBaseEvent {
         this.timeOut = timeOut;
     }
 
+    public void handle(CacheListener... ls) {
+        for (CacheListener l : ls) {
+            if (l instanceof ListListener) {
+                if (((ListListener) l).handleEvent(this))
+                    break;
+            }
+        }
+    }
 }
