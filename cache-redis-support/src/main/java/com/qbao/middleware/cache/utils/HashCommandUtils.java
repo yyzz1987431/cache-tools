@@ -60,7 +60,7 @@ public class HashCommandUtils implements IHashCommand {
      * lang.String, java.lang.String)
      */
     @Override
-    public Boolean exists(String key, String field) throws CacheCodeException {
+    public Boolean hexists(String key, String field) throws CacheCodeException {
         if (key == null || field == null || key.trim().equalsIgnoreCase("")
                 || field.trim().equalsIgnoreCase("")) {
             throw new CacheCodeException(CacheExceptionEnum.参数异常);
@@ -82,7 +82,7 @@ public class HashCommandUtils implements IHashCommand {
      * .String, java.lang.String)
      */
     @Override
-    public <T extends Serializable> T get(String key, String field,
+    public <T extends Serializable> T hget(String key, String field,
             Class<T> clazz) throws CacheCodeException {
         if (key == null || field == null || key.trim().equalsIgnoreCase("")
                 || field.trim().equalsIgnoreCase("")) {
@@ -105,7 +105,7 @@ public class HashCommandUtils implements IHashCommand {
      * .String, java.lang.String, java.io.Serializable)
      */
     @Override
-    public <T extends Serializable> Long set(String key, String field, T data)
+    public <T extends Serializable> Long hset(String key, String field, T data)
             throws CacheCodeException {
         if (key == null || data == null || key.trim().equalsIgnoreCase("")
                 || field == null || field.trim().equalsIgnoreCase("")) {
@@ -128,7 +128,7 @@ public class HashCommandUtils implements IHashCommand {
      * .String, java.lang.String)
      */
     @Override
-    public Long del(String key, String field) throws CacheCodeException {
+    public Long hdel(String key, String field) throws CacheCodeException {
         if (key == null || key.trim().equalsIgnoreCase("") || field == null
                 || field.trim().equalsIgnoreCase("")) {
             throw new CacheCodeException(CacheExceptionEnum.参数异常);
@@ -150,7 +150,7 @@ public class HashCommandUtils implements IHashCommand {
      * lang.String, java.lang.String, long)
      */
     @Override
-    public Long incrBy(String key, String field, long v)
+    public Long hincrBy(String key, String field, long v)
             throws CacheCodeException {
         if (key == null || key.trim().equalsIgnoreCase("") || field == null
                 || field.trim().equalsIgnoreCase("")) {
@@ -173,7 +173,7 @@ public class HashCommandUtils implements IHashCommand {
      * java.lang.String, java.lang.String, double)
      */
     @Override
-    public Double incrByFloat(String key, String field, double v)
+    public Double hincrByFloat(String key, String field, double v)
             throws CacheCodeException {
         
         if (key == null || key.trim().equalsIgnoreCase("") || field == null
@@ -197,7 +197,7 @@ public class HashCommandUtils implements IHashCommand {
      * .String)
      */
     @Override
-    public Long len(String key) throws CacheCodeException {
+    public Long hlen(String key) throws CacheCodeException {
         if (key == null || key.trim().equalsIgnoreCase("")) {
             throw new CacheCodeException(CacheExceptionEnum.参数异常);
         }

@@ -25,20 +25,20 @@ public interface IHashCommand extends ICacheCommand {
     // HVALS
     // HSCAN
 
-    Boolean exists(String key, String field) throws CacheCodeException;
+    Boolean hexists(String key, String field) throws CacheCodeException;
 
-    <T extends Serializable> T get(String key, String field, Class<T> clazz)
+    <T extends Serializable> T hget(String key, String field, Class<T> clazz)
             throws CacheCodeException;
 
-    <T extends Serializable> Long set(String key, String field, T data)
+    <T extends Serializable> Long hset(String key, String field, T data)
             throws CacheCodeException;
 
-    Long del(String key, String field) throws CacheCodeException;
+    Long hdel(String key, String field) throws CacheCodeException;
 
-    Long incrBy(String key, String field, long v) throws CacheCodeException;
+    Long hincrBy(String key, String field, long v) throws CacheCodeException;
 
-    Double incrByFloat(String key, String field, double v)
+    Double hincrByFloat(String key, String field, double v)
             throws CacheCodeException;
 
-    Long len(String key) throws CacheCodeException;
+    Long hlen(String key) throws CacheCodeException;
 }
