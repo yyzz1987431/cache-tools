@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.qbao.middleware</groupId>
 		<artifactId>cache-tools</artifactId>
-		<version>0.1.0</version>
+		<version>0.1.1</version>
 	</parent>
 	<artifactId>cache-core</artifactId>
 	<name>cache-core</name>

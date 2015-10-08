@@ -4,7 +4,7 @@
 
 	<groupId>com.qbao.middleware</groupId>
 	<artifactId>cache-tools</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<packaging>pom</packaging>
 
 	<name>cache-tools</name>
@@ -34,6 +34,17 @@
 	</dependencyManagement>
 
 	<repositories>
+		<repository>
+			<id>releases</id>
+			<url>http://192.168.7.246:8081/nexus/content/repositories/releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	
 		<repository>
 			<id>thirdparty</id>
 			<url>http://192.168.7.246:8081/nexus/content/repositories/thirdparty/</url>
